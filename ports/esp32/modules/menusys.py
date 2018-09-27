@@ -43,6 +43,7 @@ class Menu:
 		elif key == "launch":
 			if f != None:
 				print("Launching %s"%f)
+				epd.init()
 				epd.clear_frame(fb)
 				epd.display_string_at(fb, 0, 0, "Launching", font16, gxgde0213b1.COLORED)
 				epd.display_string_at(fb, 0, 16, self.cur_opt['text']+" ..", font16, gxgde0213b1.COLORED)
@@ -54,6 +55,10 @@ class Menu:
 				epd.display_string_at(fb, 0, 16, self.cur_opt['text']+" ..", font16, gxgde0213b1.COLORED)
 				epd.display_frame(fb)
 				time.sleep(1)
+				epd.clear_frame(fb)
+				epd.display_frame(fb)
+				epd.initPart()
+
 			else:
 				print("Could not launch '%s' no function attatched!"%self.cur_opt['text'])
 
@@ -86,37 +91,42 @@ class Menu:
 
 	def menuloop(self,up,down,left,right,run,exit):
 		m = self
+		epd.clear_frame(fb)
+		epd.display_frame(fb)
+		epd.initPart()
+
 		m.drawMenu()
-		touchdelay = 0.05
+		touchdelay = 0.01
+		touchthres = 800
 		while True:
-			if up.read()<400:
+			if up.read()<touchthres:
 				m.handleKey("up")
-				while up.read()<400:
+				while up.read()<touchthres:
 					time.sleep(touchdelay)
 				m.drawMenu()
-			if down.read()<400:
+			if down.read()<touchthres:
 				m.handleKey("down")
-				while down.read()<400:
+				while down.read()<touchthres:
 					time.sleep(touchdelay)
 				m.drawMenu()
-			if left.read()<400:
+			if left.read()<touchthres:
 				m.handleKey("left")
-				while left.read()<400:
+				while left.read()<touchthres:
 					time.sleep(touchdelay)
 				m.drawMenu()
-			if right.read()<400:
+			if right.read()<touchthres:
 				m.handleKey("right")
-				while right.read()<400:
+				while right.read()<touchthres:
 					time.sleep(touchdelay)
 				m.drawMenu()
-			if run.read()<400:
+			if run.read()<touchthres:
 				m.handleKey("launch")
-				while run.read()<400:
+				while run.read()<touchthres:
 					time.sleep(touchdelay)
 				m.drawMenu()
-			if exit.read()<400:
+			if exit.read()<touchthres:
 				m.handleKey("right")
-				while exit.read()<400:
+				while exit.read()<touchthres:
 					time.sleep(touchdelay)
 				return
 		
